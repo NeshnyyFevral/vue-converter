@@ -5,6 +5,10 @@ export const currenciesStore = defineStore({
 	id: 'currencies',
 	state: () => ({
 		currencies: [],
+		selectedFirst: '',
+		selectedSecond: '',
+		valueFirst: 1,
+		valueSecond: 1,
 	}),
 	actions: {
 		async fetchCurrencies() {
@@ -14,6 +18,14 @@ export const currenciesStore = defineStore({
 			} catch (err) {
 				console.log(err);
 			}
+		},
+		watchSelectFirst() {
+			localStorage.setItem('localeSelectFirst', JSON.stringify(this.selectedFirst));
+			localStorage.setItem('localeSelectFirstValue', JSON.stringify(this.valueFirst));
+		},
+		watchSelectSecond() {
+			localStorage.setItem('localeSelectSecond', JSON.stringify(this.selectedSecond));
+			localStorage.setItem('localeSelectSecondValue', JSON.stringify(this.valueSecond));
 		},
 	},
 });

@@ -5,16 +5,23 @@
       :value="props.computedValue"
       type="number"
       @input="inputText"
-      @blur="blurInput"
     >
     <select
       :class="$style.select"
-      :value="selectValue"
+      :value="props.selectedAttr"
       @change="changeValueSelect"
     >
       <option
+        v-if="!props.selectedAttr"
+        disabled
+        value=""
+      >
+        Выберете валюту
+      </option>
+      <option
         v-for="currency in currencies.currencies"
         :key="currency.ID"
+        :value="currency.CharCode"
         :class="$style.option"
       >
         {{ currency.CharCode }}
@@ -24,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { currenciesStore } from '../stores/currencies';
 
 const currencies = currenciesStore();
@@ -34,6 +41,10 @@ const props = defineProps({
 		type: Number,
 		default: 1,
 	},
+	selectedAttr: {
+		type: String,
+		required: true,
+	},
 });
 const inputValue = ref(0);
 
@@ -42,18 +53,22 @@ const inputText = (event) => {
 	emits('inputText', inputValue.value);
 };
 
-const blurInput = () => {
-	if (inputValue.value === '') inputValue.value = '0';
-};
-
 const selectValue = ref('');
+
 const changeValueSelect = (event) => {
 	selectValue.value = event.target.value;
 	emits('changeValueSelect', selectValue.value);
 };
+
+onMounted(() => {
+	selectValue.value = props.selectedAttr;
+	emits('changeValueSelect', selectValue.value);
+});
+
 </script>
 
 <style module lang="scss">
+
 .input::-webkit-outer-spin-button,
 .input::-webkit-inner-spin-button {
     -webkit-appearance: none;
