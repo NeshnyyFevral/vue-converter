@@ -6,27 +6,29 @@
       type="number"
       @input="inputText"
     >
-    <select
+    <div
       :class="$style.select"
-      :value="props.selectedAttr"
-      @change="changeValueSelect"
+      @click="selectOpen = !selectOpen"
     >
-      <option
-        v-if="!props.selectedAttr"
-        disabled
-        value=""
-      >
-        Выберете валюту
-      </option>
-      <option
+      <div :class="$style['selected-text']">
+        {{ props.selectedAttr }}
+        <div :class="[$style['selected-icon'], {[$style['select-closed']]: selectOpen}]" />
+      </div>
+    </div>
+
+    <ul
+      v-if="selectOpen"
+      :class="$style['select-list']"
+    >
+      <li
         v-for="currency in currencies.currencies"
         :key="currency.ID"
-        :value="currency.CharCode"
         :class="$style.option"
+        @click="changeValueSelect(currency)"
       >
         {{ currency.CharCode }}
-      </option>
-    </select>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -47,6 +49,7 @@ const props = defineProps({
 	},
 });
 const inputValue = ref(0);
+const selectOpen = ref(false);
 
 const inputText = (event) => {
 	inputValue.value = event.target.value;
@@ -55,8 +58,9 @@ const inputText = (event) => {
 
 const selectValue = ref('');
 
-const changeValueSelect = (event) => {
-	selectValue.value = event.target.value;
+const changeValueSelect = (currency) => {
+	selectValue.value = currency.CharCode;
+	selectOpen.value = false;
 	emits('changeValueSelect', selectValue.value);
 };
 
@@ -68,7 +72,67 @@ onMounted(() => {
 </script>
 
 <style module lang="scss">
+.input{
+  padding: 20px;
+  font-size: 25px;
+  border: solid #333 2px;
+  border-right: solid #333 1px;
+}
+.select{
+  padding: 34.327px 45px;
+  border: solid #333 2px;
+  border-left: solid #333 1px;
+  cursor: pointer;
+  background-color: #fff;
+  transition: background-color 0.2s linear;
+  position: relative;
+}
+.selected-text{
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate3d(-50%,-50%, 0);
+}
+.selected-icon{
+  right: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  background-image: url(../icons/arrowDown.svg);
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  transition: background-image 0.2s linear;
+}
 
+.select-closed {
+  background-image: url(../icons/arrowUp.svg);
+  transition: background-image 0.2s linear;
+}
+.select:hover{
+  background-color: rgb(231, 231, 231);
+}
+.select-list{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background-color: #fff;
+  padding: 10px;
+  border: solid 2px #333;
+  border-radius: 15px;
+  position: absolute;
+  top: 90%;
+  right: 0;
+  list-style: none;
+}
+.option{
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.1s linear;
+}
+.option:hover{
+  background-color:rgb(237, 237, 237);
+}
 .input::-webkit-outer-spin-button,
 .input::-webkit-inner-spin-button {
     -webkit-appearance: none;
