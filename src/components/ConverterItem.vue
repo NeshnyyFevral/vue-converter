@@ -73,6 +73,7 @@ onMounted(() => {
 
 <style module lang="scss">
 .input{
+  max-width: 300px;
   padding: 20px;
   font-size: 25px;
   border: solid #333 2px;
@@ -120,6 +121,7 @@ onMounted(() => {
   border: solid 2px #333;
   border-radius: 15px;
   position: absolute;
+  z-index: 1000;
   top: 90%;
   right: 0;
   list-style: none;
@@ -141,5 +143,22 @@ onMounted(() => {
 
 .input[type=number] {
     -moz-appearance:textfield;
+}
+
+@media screen and (max-width: 1000px){
+  .select{
+    padding: 34.45px 45px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .input{
+    max-width: 200px;
+  }
+}
+@media screen and (max-width: 320px) {
+  .input {
+    max-width: 120px;
+  }
 }
 </style>

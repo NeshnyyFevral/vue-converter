@@ -120,10 +120,17 @@ const swap = () => {
 </script>
 
 <style module lang="scss">
+*,
+*::after,
+*::before{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
 .converter{
   font-family: sans-serif;
   margin: 200px auto;
-  width: 1200px;
+  max-width: 1100px;
   &__wrapper{
     padding: 60px;
     display: flex;
@@ -136,8 +143,6 @@ const swap = () => {
   }
   &__button{
     border: none;
-    // background-image: url(../icons/swapGoriz.svg);
-    background-repeat: no-repeat;
     width: 60px;
     height: 60px;
     cursor: pointer;
@@ -158,6 +163,37 @@ const swap = () => {
     margin-top: 20px;
     font-size: 20px;
     text-align: center;
+  }
+}
+
+@media screen and (max-width: 1000px){
+  .converter{
+    padding: 30px;
+    margin: 50px auto;
+    &__wrapper{
+      flex-direction: column;
+      justify-content: center;
+    }
+    &__button{
+      display: block;
+      margin: 20px auto;
+      transform: rotate(90deg);
+    }
+    &__form{
+      justify-content: center;
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .converter{
+    padding: 10px;
+    &__title{
+      font-size: 40px;
+    }
+    &__wrapper{
+      padding: 20px;
+    }
   }
 }
 </style>
