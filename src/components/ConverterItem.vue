@@ -8,17 +8,17 @@
     >
     <div
       :class="$style.select"
-      @click="selectOpen = !selectOpen"
+      @click.stop="selectOpen = !selectOpen"
     >
-      <div :class="$style['selected-text']">
+      <div :class="$style.selectedText">
         {{ props.selectedAttr }}
-        <div :class="[$style['selected-icon'], {[$style['select-closed']]: selectOpen}]" />
+        <div :class="[$style.selectedIcon, {[$style.selectClosed]: selectOpen}]" />
       </div>
     </div>
 
     <ul
       v-if="selectOpen"
-      :class="$style['select-list']"
+      :class="$style.selectList"
     >
       <li
         v-for="currency in currencies.currencies"
@@ -50,13 +50,17 @@ const props = defineProps({
 });
 const inputValue = ref(0);
 const selectOpen = ref(false);
+const selectValue = ref('');
+
+onMounted(() => {
+	selectValue.value = props.selectedAttr;
+	emits('changeValueSelect', selectValue.value);
+});
 
 const inputText = (event) => {
 	inputValue.value = event.target.value;
 	emits('inputText', inputValue.value);
 };
-
-const selectValue = ref('');
 
 const changeValueSelect = (currency) => {
 	selectValue.value = currency.CharCode;
@@ -64,9 +68,9 @@ const changeValueSelect = (currency) => {
 	emits('changeValueSelect', selectValue.value);
 };
 
-onMounted(() => {
-	selectValue.value = props.selectedAttr;
-	emits('changeValueSelect', selectValue.value);
+const app = document.querySelector('#app');
+app.addEventListener('click', () => {
+	selectOpen.value = false;
 });
 
 </script>
@@ -88,13 +92,13 @@ onMounted(() => {
   transition: background-color 0.2s linear;
   position: relative;
 }
-.selected-text{
+.selectedText{
   position: absolute;
   top: 50%;
   left: 40%;
   transform: translate3d(-50%,-50%, 0);
 }
-.selected-icon{
+.selectedIcon{
   right: -25px;
   top: 50%;
   transform: translateY(-50%);
@@ -106,14 +110,14 @@ onMounted(() => {
   transition: background-image 0.2s linear;
 }
 
-.select-closed {
+.selectClosed {
   background-image: url(../icons/arrowUp.svg);
   transition: background-image 0.2s linear;
 }
 .select:hover{
   background-color: rgb(231, 231, 231);
 }
-.select-list{
+.selectList{
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   background-color: #fff;

@@ -1,25 +1,25 @@
 <template>
   <div :class="$style.converter">
-    <h1 :class="$style.converter__title">
+    <h1 :class="$style.title">
       Vue Converter
     </h1>
-    <div :class="$style.converter__wrapper">
-      <div :class="$style.converter__item">
+    <div :class="$style.wrapper">
+      <div :class="$style.item">
         <converter-item
-          :class="$style.converter__form"
+          :class="$style.form"
           :computed-value="inputValueFirst"
           :selected-attr="currencies.selectedFirst"
           @input-text="inputFirst"
           @change-value-select="changeFirst"
         />
-        <div :class="$style.converter__ratio">
+        <div :class="$style.ratio">
           1 {{ currencies.selectedFirst }} =
           {{ ratioFirstFromSecond }}
           {{ currencies.selectedSecond }}
         </div>
       </div>
       <button
-        :class="$style.converter__button"
+        :class="$style.button"
         @click="swap"
       >
         <svg
@@ -43,15 +43,15 @@
           />
         </svg>
       </button>
-      <div :class="$style.converter__item">
+      <div :class="$style.item">
         <converter-item
-          :class="$style.converter__form"
+          :class="$style.form"
           :computed-value="inputValueSecond"
           :selected-attr="currencies.selectedSecond"
           @input-text="inputSecond"
           @change-value-select="changeSecond"
         />
-        <div :class="$style.converter__ratio">
+        <div :class="$style.ratio">
           1 {{ currencies.selectedSecond }} =
           {{ ratioSecondFromFirst }}
           {{ currencies.selectedFirst }}
@@ -131,69 +131,78 @@ const swap = () => {
   font-family: sans-serif;
   margin: 200px auto;
   max-width: 1100px;
-  &__wrapper{
-    padding: 60px;
-    display: flex;
-    justify-content: space-between;
-    background-color: rgb(244, 244, 244);
-  }
-  &__title{
-    text-align: center;
-    font-size: 50px;
-  }
-  &__button{
-    border: none;
-    width: 60px;
-    height: 60px;
-    cursor: pointer;
-    background-color: transparent;
-    fill: rgb(109, 109, 109);
-    transition: fill 0.2s linear;
-  }
-  &__button:hover{
-    fill: rgb(0, 0, 0);
-  }
-  &__form{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-  }
-  &__ratio{
-    margin-top: 20px;
-    font-size: 20px;
-    text-align: center;
-  }
+}
+
+.wrapper {
+  padding: 60px;
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(244, 244, 244);
+}
+
+.title {
+  text-align: center;
+  font-size: 50px;
+}
+
+.button {
+  border: none;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  background-color: transparent;
+  fill: rgb(109, 109, 109);
+  transition: fill 0.2s linear;
+}
+
+.button:hover {
+  fill: rgb(0, 0, 0);
+}
+
+.form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+}
+
+.ratio {
+  margin-top: 20px;
+  font-size: 20px;
+  text-align: center;
 }
 
 @media screen and (max-width: 1000px){
   .converter{
     padding: 30px;
-    margin: 50px auto;
-    &__wrapper{
-      flex-direction: column;
-      justify-content: center;
-    }
-    &__button{
-      display: block;
-      margin: 20px auto;
-      transform: rotate(90deg);
-    }
-    &__form{
-      justify-content: center;
-    }
+    margin: 110px auto;
+  }
+  .wrapper {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .button {
+    display: block;
+    margin: 20px auto;
+    transform: rotate(90deg);
+  }
+
+  .form {
+    justify-content: center;
   }
 }
 
 @media screen and (max-width: 500px) {
   .converter{
     padding: 10px;
-    &__title{
-      font-size: 40px;
-    }
-    &__wrapper{
-      padding: 20px;
-    }
+  }
+  .title {
+    font-size: 40px;
+  }
+
+  .wrapper {
+    padding: 20px;
   }
 }
 </style>
