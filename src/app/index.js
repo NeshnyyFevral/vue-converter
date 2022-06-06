@@ -16,8 +16,8 @@ export default function createApp() {
 			currencies: [],
 			selectedFirst: localeSelectFirst || '',
 			selectedSecond: localeSelectSecond || '',
-			valueFirst: localeSelectFirstValue || 0,
-			valueSecond: localeSelectSecondValue || 0,
+			valueFirst: localeSelectFirstValue || 1,
+			valueSecond: localeSelectSecondValue || 1,
 		},
 	};
 

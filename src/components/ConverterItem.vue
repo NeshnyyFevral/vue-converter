@@ -53,7 +53,7 @@ const selectOpen = ref(false);
 const selectValue = ref('');
 
 onMounted(() => {
-	selectValue.value = props.selectedAttr;
+	selectValue.value = props.selectedAttr || 'AUD';
 	emits('changeValueSelect', selectValue.value);
 });
 
