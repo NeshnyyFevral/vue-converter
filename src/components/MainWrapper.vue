@@ -14,7 +14,7 @@
         />
         <div :class="$style.ratio">
           1 {{ currencies.selectedFirst }} =
-          {{ ratioSecondFromFirst }}
+          {{ ratioFirstFromSecond }}
           {{ currencies.selectedSecond }}
         </div>
       </div>
