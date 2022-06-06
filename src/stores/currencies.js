@@ -5,8 +5,8 @@ export const currenciesStore = defineStore({
 	id: 'currencies',
 	state: () => ({
 		currencies: [],
-		selectedFirst: '',
-		selectedSecond: '',
+		selectedFirst: 'AUD',
+		selectedSecond: 'AZN',
 		valueFirst: 1,
 		valueSecond: 1,
 	}),
