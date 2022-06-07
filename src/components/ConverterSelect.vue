@@ -6,10 +6,11 @@
     >
       <div :class="$style.selectedText">
         {{ props.selectedAttr }}
-        <img
-          src="../icons/arrow.svg"
+        <div
           :class="[$style.selectedIcon, { [$style.selectClosed]: selectOpen }]"
         >
+          <arrow-svg />
+        </div>
       </div>
     </div>
     <ul
@@ -35,6 +36,7 @@ import {
 	onMounted,
 	onUnmounted,
 } from 'vue';
+import arrowSvg from '../icons/arrow.svg';
 
 const selectOpen = ref(false);
 const selectValue = ref('');
