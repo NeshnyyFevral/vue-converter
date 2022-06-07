@@ -22,26 +22,7 @@
         :class="$style.button"
         @click="swap"
       >
-        <svg
-          role="img"
-          focusable="false"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 14 14"
-        >
-          <path
-            d="m 1,4.9375637 0,-0.375 c 0,-0.31066 0.2518359,-0.5625 0.5625,
-          -0.5625 l 8.4375,0 0,-1.125 c 0,-0.50079 0.607008,-0.75098 0.960258,
-          -0.39776 l 1.875,1.875 c 0.219656,0.21968 0.219656,0.57584 0,0.79549 l -1.875,
-          1.875 C 10.608344,7.3746437 10,7.1279437 10,6.6250637 l 0,-1.125 -8.4375,
-          0 C 1.2518359,5.5000637 1,5.2482237 1,4.9375637 Z m 11.4375,3.5625 -8.4375,
-          0 0,-1.125 c 0,-0.49955 -0.6061406,-0.75187 -0.9602578,-0.39776 l -1.875,
-          1.875 c -0.21965626,0.21968 -0.21965626,0.57584 0,0.79549 l 1.875,
-          1.8750003 C 3.3919609,11.874994 4,11.627494 4,11.125064 l 0,-1.125 8.4375,
-          0 C 12.748164,10.000064 13,9.7482237 13,9.4375637 l 0,-0.375 c 0,
-          -0.31066 -0.251836,-0.5625 -0.5625,-0.5625 z"
-          />
-        </svg>
+        <arrows-swap-svg />
       </button>
       <div :class="$style.item">
         <converter-item
@@ -62,9 +43,14 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from 'vue';
+import {
+	computed,
+	ref,
+	onMounted,
+} from 'vue';
 import ConverterItem from './ConverterItem.vue';
 import { currenciesStore } from '../stores/currencies';
+import arrowsSwapSvg from '../icons/arrows-swap.svg';
 
 const currencies = currenciesStore();
 const inputValueFirst = ref(1);
@@ -126,15 +112,14 @@ const changeSecond = (name) => {
 };
 
 const swap = () => {
-	const firstTmp = selectedFirst.value;
-	const secondTmp = selectedSecond.value;
-	changeFirst(secondTmp);
-	changeSecond(firstTmp);
+	const selectTmp = selectedFirst.value;
+	changeFirst(selectedSecond.value);
+	changeSecond(selectTmp);
 };
 
 onMounted(() => {
 	selectedFirst.value = JSON.parse(localStorage.getItem('localeSelectFirst')) || 'AUD';
-	selectedSecond.value = JSON.parse(localStorage.getItem('localeSelectSecond')) || 'AZN';
+	selectedSecond.value = JSON.parse(localStorage.getItem('localeSelectSecond')) || 'AUD';
 	valueFirst.value = JSON.parse(localStorage.getItem('localeSelectFirstValue')) || 1;
 	valueSecond.value = JSON.parse(localStorage.getItem('localeSelectSecondValue')) || 1;
 	computeInputValueSecond();

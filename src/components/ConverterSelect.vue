@@ -1,0 +1,149 @@
+<template>
+  <div>
+    <div
+      :class="$style.select"
+      @click.stop="selectOpen = !selectOpen"
+    >
+      <div :class="$style.selectedText">
+        {{ props.selectedAttr }}
+        <img
+          src="../icons/arrow.svg"
+          :class="[$style.selectedIcon, { [$style.selectClosed]: selectOpen }]"
+        >
+      </div>
+    </div>
+    <ul
+      v-if="selectOpen"
+      :class="$style.selectList"
+    >
+      <li
+        v-for="currency in props.currencies"
+        :key="currency.ID"
+        :class="$style.option"
+        @click="changeValueSelect(currency)"
+      >
+        {{ currency.CharCode }}
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script setup>
+import {
+	ref,
+	watch,
+	onMounted,
+	onUnmounted,
+} from 'vue';
+
+const selectOpen = ref(false);
+const selectValue = ref('');
+const app = document.querySelector('html');
+
+const emits = defineEmits(['changeValueSelect']);
+const props = defineProps({
+	currencies: {
+		type: Object,
+		default: () => ({}),
+	},
+	selectedAttr: {
+		type: String,
+		required: true,
+	},
+});
+
+const listСlosure = () => { selectOpen.value = false; };
+
+watch(selectOpen, () => {
+	if (selectOpen.value) {
+		app.addEventListener('click', listСlosure);
+	} else {
+		app.removeEventListener('click', listСlosure);
+	}
+});
+
+onMounted(() => {
+	selectValue.value = props.selectedAttr;
+	emits('changeValueSelect', selectValue.value);
+});
+
+onUnmounted(() => {
+	app.removeEventListener('click', listСlosure);
+});
+
+const changeValueSelect = (currency) => {
+	selectValue.value = currency.CharCode;
+	selectOpen.value = false;
+	emits('changeValueSelect', selectValue.value);
+};
+</script>
+
+<style module lang="scss">
+.select {
+	padding: 34.327px 45px;
+	border: solid #333 2px;
+	border-left: solid #333 1px;
+	cursor: pointer;
+	background-color: #fff;
+	transition: background-color 0.2s linear;
+	position: relative;
+}
+
+.selectedText {
+	position: absolute;
+	top: 50%;
+	left: 40%;
+	transform: translate3d(-50%, -50%, 0);
+}
+
+.selectedIcon {
+	right: -25px;
+	top: 50%;
+	transform: translateY(-50%);
+	position: absolute;
+	background-repeat: no-repeat;
+	width: 20px;
+	height: 20px;
+	transition: transform 0.5s ease-in-out;
+}
+
+.selectClosed {
+	transform: rotate(180deg) translateY(50%);
+	transition: transform 0.5s ease-in-out;
+}
+
+.select:hover {
+	background-color: rgb(231, 231, 231);
+}
+
+.selectList {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	background-color: #fff;
+	padding: 10px;
+	border: solid 2px #333;
+	border-radius: 15px;
+	position: absolute;
+	z-index: 1000;
+	top: 90%;
+	right: 0;
+	list-style: none;
+}
+
+.option {
+	padding: 5px;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.1s linear;
+}
+
+.option:hover {
+	background-color: rgb(237, 237, 237);
+}
+
+@media screen and (max-width: 1000px) {
+	.select {
+		padding: 34.45px 45px;
+	}
+}
+</style>

@@ -3,11 +3,13 @@ import { defineConfig } from 'vite';
 
 import vitePluginVue from '@vitejs/plugin-vue';
 import vitePluginEslint from 'vite-plugin-eslint';
+import viteSvgLoader from 'vite-svg-loader';
 
 export default defineConfig({
 	plugins: [
 		vitePluginVue(),
 		vitePluginEslint(),
+		viteSvgLoader(),
 	],
 	base: '/vue-converter/',
 	build: {

@@ -13,6 +13,7 @@ export default function createApp() {
 	};
 
 	return {
-		pinia, app,
+		pinia,
+		app,
 	};
 }
