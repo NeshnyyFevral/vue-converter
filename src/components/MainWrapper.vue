@@ -8,14 +8,14 @@
         <converter-item
           :class="$style.form"
           :computed-value="inputValueFirst"
-          :selected-attr="currencies.selectedFirst"
+          :selected-attr="selectedFirst"
           @input-text="inputFirst"
           @change-value-select="changeFirst"
         />
         <div :class="$style.ratio">
-          1 {{ currencies.selectedFirst }} =
+          1 {{ selectedFirst }} =
           {{ ratioFirstFromSecond }}
-          {{ currencies.selectedSecond }}
+          {{ selectedSecond }}
         </div>
       </div>
       <button
@@ -47,14 +47,14 @@
         <converter-item
           :class="$style.form"
           :computed-value="inputValueSecond"
-          :selected-attr="currencies.selectedSecond"
+          :selected-attr="selectedSecond"
           @input-text="inputSecond"
           @change-value-select="changeSecond"
         />
         <div :class="$style.ratio">
-          1 {{ currencies.selectedSecond }} =
+          1 {{ selectedSecond }} =
           {{ ratioSecondFromFirst }}
-          {{ currencies.selectedFirst }}
+          {{ selectedFirst }}
         </div>
       </div>
     </div>
@@ -62,7 +62,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import ConverterItem from './ConverterItem.vue';
 import { currenciesStore } from '../stores/currencies';
 
@@ -70,13 +70,28 @@ const currencies = currenciesStore();
 const inputValueFirst = ref(1);
 const inputValueSecond = ref(1);
 
+const selectedFirst = ref('');
+const selectedSecond = ref('');
+const valueFirst = ref(1);
+const valueSecond = ref(1);
+
 // вычисление коэффициента
 const ratioFirstFromSecond = computed(
-	() => (currencies.valueFirst / currencies.valueSecond).toFixed(5),
+	() => (valueFirst.value / valueSecond.value).toFixed(5),
 );
 const ratioSecondFromFirst = computed(
-	() => (currencies.valueSecond / currencies.valueFirst).toFixed(5),
+	() => (valueSecond.value / valueFirst.value).toFixed(5),
 );
+
+const watchSelectFirst = () => {
+	localStorage.setItem('localeSelectFirst', JSON.stringify(selectedFirst.value));
+	localStorage.setItem('localeSelectFirstValue', JSON.stringify(valueFirst.value));
+};
+
+const watchSelectSecond = () => {
+	localStorage.setItem('localeSelectSecond', JSON.stringify(selectedSecond.value));
+	localStorage.setItem('localeSelectSecondValue', JSON.stringify(valueSecond.value));
+};
 
 const computeInputValueSecond = () => {
 	inputValueSecond.value = +(inputValueFirst.value * ratioFirstFromSecond.value).toFixed(5);
@@ -94,28 +109,36 @@ const inputSecond = (value) => {
 
 // получение стоимости валюты
 const changeFirst = (name) => {
-	Object.values(currencies.currencies).forEach((currency) => {
-		if (currency.CharCode === name) currencies.valueFirst = currency.Value;
-	});
-	currencies.selectedFirst = name;
-	currencies.watchSelectFirst();
+	if (currencies.currencies[name]) {
+		selectedFirst.value = currencies.currencies[name].CharCode;
+		valueFirst.value = currencies.currencies[name].Value;
+		watchSelectFirst();
+	}
 	computeInputValueSecond();
 };
 const changeSecond = (name) => {
-	Object.values(currencies.currencies).forEach((currency) => {
-		if (currency.CharCode === name) currencies.valueSecond = currency.Value;
-	});
-	currencies.selectedSecond = name;
-	currencies.watchSelectSecond();
+	if (currencies.currencies[name]) {
+		selectedSecond.value = currencies.currencies[name].CharCode;
+		valueSecond.value = currencies.currencies[name].Value;
+		watchSelectSecond();
+	}
 	computeInputValueSecond();
 };
 
 const swap = () => {
-	const firstTmp = currencies.selectedFirst;
-	const secondTmp = currencies.selectedSecond;
+	const firstTmp = selectedFirst.value;
+	const secondTmp = selectedSecond.value;
 	changeFirst(secondTmp);
 	changeSecond(firstTmp);
 };
+
+onMounted(() => {
+	selectedFirst.value = JSON.parse(localStorage.getItem('localeSelectFirst')) || 'AUD';
+	selectedSecond.value = JSON.parse(localStorage.getItem('localeSelectSecond')) || 'AZN';
+	valueFirst.value = JSON.parse(localStorage.getItem('localeSelectFirstValue')) || 1;
+	valueSecond.value = JSON.parse(localStorage.getItem('localeSelectSecondValue')) || 1;
+	computeInputValueSecond();
+});
 
 </script>
 

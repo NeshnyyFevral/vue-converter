@@ -12,7 +12,10 @@
     >
       <div :class="$style.selectedText">
         {{ props.selectedAttr }}
-        <div :class="[$style.selectedIcon, {[$style.selectClosed]: selectOpen}]" />
+        <img
+          src="../icons/arrow.svg"
+          :class="[$style.selectedIcon, {[$style.selectClosed]: selectOpen}]"
+        >
       </div>
     </div>
 
@@ -33,7 +36,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import {
+	ref, onMounted, onUnmounted, watch,
+} from 'vue';
 import { currenciesStore } from '../stores/currencies';
 
 const currencies = currenciesStore();
@@ -51,10 +56,25 @@ const props = defineProps({
 const inputValue = ref(0);
 const selectOpen = ref(false);
 const selectValue = ref('');
+const app = document.querySelector('html');
+
+const listСlosure = () => { selectOpen.value = false; };
+
+watch(selectOpen, () => {
+	if (selectOpen.value) {
+		app.addEventListener('click', listСlosure);
+	} else {
+		app.removeEventListener('click', listСlosure);
+	}
+});
 
 onMounted(() => {
-	selectValue.value = props.selectedAttr || 'AUD';
+	selectValue.value = props.selectedAttr;
 	emits('changeValueSelect', selectValue.value);
+});
+
+onUnmounted(() => {
+	app.removeEventListener('click', listСlosure);
 });
 
 const inputText = (event) => {
@@ -67,11 +87,6 @@ const changeValueSelect = (currency) => {
 	selectOpen.value = false;
 	emits('changeValueSelect', selectValue.value);
 };
-
-const app = document.querySelector('#app');
-app.addEventListener('click', () => {
-	selectOpen.value = false;
-});
 
 </script>
 
@@ -103,16 +118,15 @@ app.addEventListener('click', () => {
   top: 50%;
   transform: translateY(-50%);
   position: absolute;
-  background-image: url(../icons/arrowDown.svg);
   background-repeat: no-repeat;
   width: 20px;
   height: 20px;
-  transition: background-image 0.2s linear;
+  transition: transform 0.5s ease-in-out;
 }
 
 .selectClosed {
-  background-image: url(../icons/arrowUp.svg);
-  transition: background-image 0.2s linear;
+  transform: rotate(180deg) translateY(50%);
+  transition: transform 0.5s ease-in-out;
 }
 .select:hover{
   background-color: rgb(231, 231, 231);
