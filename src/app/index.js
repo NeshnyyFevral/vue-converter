@@ -6,9 +6,14 @@ export default function createApp() {
 	const pinia = createPinia();
 	const app = _createApp(App);
 
+	const localeFavorites = JSON.parse(localStorage.getItem('localeFavorites'));
+
 	pinia.state.value = {
 		currencies: {
 			currencies: {},
+		},
+		favorites: {
+			favorites: localeFavorites || [],
 		},
 	};
 

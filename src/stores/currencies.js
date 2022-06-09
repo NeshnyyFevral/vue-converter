@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { defineStore } from 'pinia';
 
-export const currenciesStore = defineStore({
+export const useCurrenciesStore = defineStore({
 	id: 'currencies',
 	state: () => ({
 		currencies: {},

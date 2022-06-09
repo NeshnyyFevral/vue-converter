@@ -4,40 +4,51 @@
       Vue Converter
     </h1>
     <div :class="$style.wrapper">
-      <div :class="$style.item">
-        <converter-item
-          :class="$style.form"
-          :computed-value="inputValueFirst"
-          :selected-attr="selectedFirst"
-          @input-text="inputFirst"
-          @change-value-select="changeFirst"
-        />
-        <div :class="$style.ratio">
-          1 {{ selectedFirst }} =
-          {{ ratioFirstFromSecond }}
-          {{ selectedSecond }}
+      <div :class="$style.main">
+        <div :class="$style.item">
+          <converter-item
+            :class="$style.form"
+            :computed-value="inputValueFirst"
+            :selected-attr="selectedFirst"
+            @input-text="inputFirst"
+            @change-value-select="changeFirst"
+          />
+          <div :class="$style.ratio">
+            1 {{ selectedFirst }} =
+            {{ ratioFirstFromSecond }}
+            {{ selectedSecond }}
+          </div>
+        </div>
+        <button
+          :class="$style.button"
+          @click="swap"
+        >
+          <arrows-swap-svg />
+        </button>
+        <div :class="$style.item">
+          <converter-item
+            :class="$style.form"
+            :computed-value="inputValueSecond"
+            :selected-attr="selectedSecond"
+            @input-text="inputSecond"
+            @change-value-select="changeSecond"
+          />
+          <div :class="$style.ratio">
+            1 {{ selectedSecond }} =
+            {{ ratioSecondFromFirst }}
+            {{ selectedFirst }}
+          </div>
+        </div>
+        <div :class="$style.buttons">
+          <button
+            :class="$style.favoritesBtn"
+            @click="createFavorite"
+          >
+            кнопка для избранного
+          </button>
         </div>
       </div>
-      <button
-        :class="$style.button"
-        @click="swap"
-      >
-        <arrows-swap-svg />
-      </button>
-      <div :class="$style.item">
-        <converter-item
-          :class="$style.form"
-          :computed-value="inputValueSecond"
-          :selected-attr="selectedSecond"
-          @input-text="inputSecond"
-          @change-value-select="changeSecond"
-        />
-        <div :class="$style.ratio">
-          1 {{ selectedSecond }} =
-          {{ ratioSecondFromFirst }}
-          {{ selectedFirst }}
-        </div>
-      </div>
+      <favorites-valutes @select-favorite="selectFavorite" />
     </div>
   </div>
 </template>
@@ -49,10 +60,13 @@ import {
 	onMounted,
 } from 'vue';
 import ConverterItem from './ConverterItem.vue';
-import { currenciesStore } from '../stores/currencies';
+import FavoritesValutes from './FavoritesValutes.vue';
+import { useCurrenciesStore } from '../stores/currencies';
+import { useFavoritesStore } from '../stores/favorites';
 import arrowsSwapSvg from '../icons/arrows-swap.svg';
 
-const currencies = currenciesStore();
+const currenciesStore = useCurrenciesStore();
+const favoritesStore = useFavoritesStore();
 const inputValueFirst = ref(1);
 const inputValueSecond = ref(1);
 
@@ -103,17 +117,17 @@ const inputSecond = (value) => {
 
 // получение стоимости валюты
 const changeFirst = (name) => {
-	if (currencies.currencies[name]) {
-		selectedFirst.value = currencies.currencies[name].CharCode;
-		valueFirst.value = currencies.currencies[name].Value;
+	if (currenciesStore.currencies[name]) {
+		selectedFirst.value = currenciesStore.currencies[name].CharCode;
+		valueFirst.value = currenciesStore.currencies[name].Value;
 		watchSelectFirst();
 	}
 	computeInputValueSecond();
 };
 const changeSecond = (name) => {
-	if (currencies.currencies[name]) {
-		selectedSecond.value = currencies.currencies[name].CharCode;
-		valueSecond.value = currencies.currencies[name].Value;
+	if (currenciesStore.currencies[name]) {
+		selectedSecond.value = currenciesStore.currencies[name].CharCode;
+		valueSecond.value = currenciesStore.currencies[name].Value;
 		watchSelectSecond();
 	}
 	computeInputValueSecond();
@@ -123,6 +137,20 @@ const swap = () => {
 	const selectTmp = selectedFirst.value;
 	changeFirst(selectedSecond.value);
 	changeSecond(selectTmp);
+};
+
+const createFavorite = () => {
+	const value = {
+		firstSelect: selectedFirst.value,
+		secondSelect: selectedSecond.value,
+		ratio: ratioSecondFromFirst.value,
+	};
+	favoritesStore.createFavorite(value);
+};
+
+const selectFavorite = (favorite) => {
+	changeFirst(favorite.firstSelect);
+	changeSecond(favorite.secondSelect);
 };
 
 </script>
@@ -137,20 +165,25 @@ const swap = () => {
 }
 .converter{
   font-family: sans-serif;
-  margin: 200px auto;
+  margin: 180px auto;
   max-width: 1100px;
 }
 
 .wrapper {
   padding: 60px;
+  background-color: rgb(244, 244, 244);
+  position: relative;
+}
+
+.main{
   display: flex;
   justify-content: space-between;
-  background-color: rgb(244, 244, 244);
 }
 
 .title {
   text-align: center;
   font-size: 50px;
+  margin-bottom: 20px;
 }
 
 .button {
@@ -180,10 +213,16 @@ const swap = () => {
   text-align: center;
 }
 
+.buttons{
+  position: absolute;
+  right: 30px;
+  top: 10px
+}
+
 @media screen and (max-width: 1000px){
   .converter{
     padding: 30px;
-    margin: 110px auto;
+    margin: 100px auto;
   }
   .wrapper {
     flex-direction: column;

@@ -5,10 +5,10 @@
 <script setup>
 import { onMounted } from 'vue';
 import MainWrapper from './components/MainWrapper.vue';
-import { currenciesStore } from './stores/currencies';
+import { useCurrenciesStore } from './stores/currencies';
 
-const currencies = currenciesStore();
+const currenciesStore = useCurrenciesStore();
 onMounted(() => {
-	currencies.fetchCurrencies();
+	currenciesStore.fetchCurrencies();
 });
 </script>

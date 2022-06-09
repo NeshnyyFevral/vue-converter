@@ -13,11 +13,11 @@
 </template>
 
 <script setup>
-import { currenciesStore } from '../stores/currencies';
+import { useCurrenciesStore } from '../stores/currencies';
 import ConverterInputVue from './ConverterInput.vue';
 import ConverterSelectVue from './ConverterSelect.vue';
 
-const currencies = currenciesStore();
+const currencies = useCurrenciesStore();
 const emits = defineEmits(['changeValueSelect', 'inputText']);
 const props = defineProps({
 	computedValue: {
