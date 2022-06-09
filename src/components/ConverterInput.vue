@@ -30,32 +30,32 @@ const inputText = (event) => {
 
 <style module lang="scss">
 .input {
-	max-width: 300px;
-	padding: 20px;
-	font-size: 25px;
-	border: solid #333 2px;
-	border-right: solid #333 1px;
+  max-width: 300px;
+  padding: 20px;
+  font-size: 25px;
+  border: solid #333 2px;
+  border-right: solid #333 1px;
 }
 
 .input::-webkit-outer-spin-button,
 .input::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .input[type=number] {
-	-moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 @media screen and (max-width: 500px) {
-	.input {
-		max-width: 200px;
-	}
+  .input {
+    max-width: 200px;
+  }
 }
 
 @media screen and (max-width: 320px) {
-	.input {
-		max-width: 120px;
-	}
+  .input {
+    max-width: 120px;
+  }
 }
 </style>

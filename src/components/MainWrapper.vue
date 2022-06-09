@@ -69,6 +69,18 @@ const ratioSecondFromFirst = computed(
 	() => (valueSecond.value / valueFirst.value).toFixed(5),
 );
 
+const computeInputValueSecond = () => {
+	inputValueSecond.value = +(inputValueFirst.value * ratioFirstFromSecond.value).toFixed(5);
+};
+
+onMounted(() => {
+	selectedFirst.value = JSON.parse(localStorage.getItem('localeSelectFirst')) || 'AUD';
+	selectedSecond.value = JSON.parse(localStorage.getItem('localeSelectSecond')) || 'AUD';
+	valueFirst.value = JSON.parse(localStorage.getItem('localeSelectFirstValue')) || 1;
+	valueSecond.value = JSON.parse(localStorage.getItem('localeSelectSecondValue')) || 1;
+	computeInputValueSecond();
+});
+
 const watchSelectFirst = () => {
 	localStorage.setItem('localeSelectFirst', JSON.stringify(selectedFirst.value));
 	localStorage.setItem('localeSelectFirstValue', JSON.stringify(valueFirst.value));
@@ -77,10 +89,6 @@ const watchSelectFirst = () => {
 const watchSelectSecond = () => {
 	localStorage.setItem('localeSelectSecond', JSON.stringify(selectedSecond.value));
 	localStorage.setItem('localeSelectSecondValue', JSON.stringify(valueSecond.value));
-};
-
-const computeInputValueSecond = () => {
-	inputValueSecond.value = +(inputValueFirst.value * ratioFirstFromSecond.value).toFixed(5);
 };
 
 // получение данных из input
@@ -116,14 +124,6 @@ const swap = () => {
 	changeFirst(selectedSecond.value);
 	changeSecond(selectTmp);
 };
-
-onMounted(() => {
-	selectedFirst.value = JSON.parse(localStorage.getItem('localeSelectFirst')) || 'AUD';
-	selectedSecond.value = JSON.parse(localStorage.getItem('localeSelectSecond')) || 'AUD';
-	valueFirst.value = JSON.parse(localStorage.getItem('localeSelectFirstValue')) || 1;
-	valueSecond.value = JSON.parse(localStorage.getItem('localeSelectSecondValue')) || 1;
-	computeInputValueSecond();
-});
 
 </script>
 

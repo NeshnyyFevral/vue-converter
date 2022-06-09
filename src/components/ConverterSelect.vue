@@ -6,9 +6,7 @@
     >
       <div :class="$style.selectedText">
         {{ props.selectedAttr }}
-        <div
-          :class="[$style.selectedIcon, { [$style.selectClosed]: selectOpen }]"
-        >
+        <div :class="[$style.selectedIcon, selectOpen && $style.selectClosed ]">
           <arrow-svg />
         </div>
       </div>
@@ -82,70 +80,70 @@ const changeValueSelect = (currency) => {
 
 <style module lang="scss">
 .select {
-	padding: 34.327px 45px;
-	border: solid #333 2px;
-	border-left: solid #333 1px;
-	cursor: pointer;
-	background-color: #fff;
-	transition: background-color 0.2s linear;
-	position: relative;
+  padding: 34.327px 45px;
+  border: solid #333 2px;
+  border-left: solid #333 1px;
+  cursor: pointer;
+  background-color: #fff;
+  transition: background-color 0.2s linear;
+  position: relative;
 }
 
 .selectedText {
-	position: absolute;
-	top: 50%;
-	left: 40%;
-	transform: translate3d(-50%, -50%, 0);
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate3d(-50%, -50%, 0);
 }
 
 .selectedIcon {
-	right: -25px;
-	top: 50%;
-	transform: translateY(-50%);
-	position: absolute;
-	background-repeat: no-repeat;
-	width: 20px;
-	height: 20px;
-	transition: transform 0.5s ease-in-out;
+  right: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.5s ease-in-out;
 }
 
 .selectClosed {
-	transform: rotate(180deg) translateY(50%);
-	transition: transform 0.5s ease-in-out;
+  transform: rotate(180deg) translateY(50%);
+  transition: transform 0.5s ease-in-out;
 }
 
 .select:hover {
-	background-color: rgb(231, 231, 231);
+  background-color: rgb(231, 231, 231);
 }
 
 .selectList {
-	display: grid;
-	grid-template-columns: repeat(5, 1fr);
-	background-color: #fff;
-	padding: 10px;
-	border: solid 2px #333;
-	border-radius: 15px;
-	position: absolute;
-	z-index: 1000;
-	top: 90%;
-	right: 0;
-	list-style: none;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background-color: #fff;
+  padding: 10px;
+  border: solid 2px #333;
+  border-radius: 15px;
+  position: absolute;
+  z-index: 1000;
+  top: 90%;
+  right: 0;
+  list-style: none;
 }
 
 .option {
-	padding: 5px;
-	border-radius: 10px;
-	cursor: pointer;
-	transition: background-color 0.1s linear;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.1s linear;
 }
 
 .option:hover {
-	background-color: rgb(237, 237, 237);
+  background-color: rgb(237, 237, 237);
 }
 
 @media screen and (max-width: 1000px) {
-	.select {
-		padding: 34.45px 45px;
-	}
+  .select {
+    padding: 34.45px 45px;
+  }
 }
 </style>
