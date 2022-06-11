@@ -1,24 +1,26 @@
 <template>
   <div>
-    <converter-input-vue
+    <converter-input
       :computed-value="props.computedValue"
       @input-text="inputText"
     />
-    <converter-select-vue
+    <converter-select
       :currencies="currencies.currencies"
       :selected-attr="selectedAttr"
+      :state-another-list="props.stateAnotherList"
       @change-value-select="changeValueSelect"
+      @open-select="openSelect"
     />
   </div>
 </template>
 
 <script setup>
 import { useCurrenciesStore } from '../stores/currencies';
-import ConverterInputVue from './ConverterInput.vue';
-import ConverterSelectVue from './ConverterSelect.vue';
+import ConverterInput from './ConverterInput.vue';
+import ConverterSelect from './ConverterSelect.vue';
 
 const currencies = useCurrenciesStore();
-const emits = defineEmits(['changeValueSelect', 'inputText']);
+const emits = defineEmits(['changeValueSelect', 'inputText', 'openSelect']);
 const props = defineProps({
 	computedValue: {
 		type: Number,
@@ -28,9 +30,14 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
+	stateAnotherList: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const inputText = (value) => { emits('inputText', value); };
 const changeValueSelect = (value) => { emits('changeValueSelect', value); };
+const openSelect = (value) => { emits('openSelect', value); };
 
 </script>

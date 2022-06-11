@@ -10,8 +10,10 @@
             :class="$style.form"
             :computed-value="inputValueFirst"
             :selected-attr="selectedFirst"
+            :state-another-list="stateSecondList"
             @input-text="inputFirst"
             @change-value-select="changeFirst"
+            @open-select="openSelectFirst"
           />
           <div :class="$style.ratio">
             1 {{ selectedFirst }} =
@@ -30,8 +32,10 @@
             :class="$style.form"
             :computed-value="inputValueSecond"
             :selected-attr="selectedSecond"
+            :state-another-list="stateFirstList"
             @input-text="inputSecond"
             @change-value-select="changeSecond"
+            @open-select="openSelectSecond"
           />
           <div :class="$style.ratio">
             1 {{ selectedSecond }} =
@@ -44,7 +48,13 @@
             :class="$style.favoritesBtn"
             @click="createFavorite"
           >
-            кнопка для избранного
+            Add to favorites
+          </button>
+          <button
+            :class="$style.favoritesBtn"
+            @click="favoritesStore.clearFavorites"
+          >
+            Clear all favorites
           </button>
         </div>
       </div>
@@ -74,6 +84,12 @@ const selectedFirst = ref('');
 const selectedSecond = ref('');
 const valueFirst = ref(1);
 const valueSecond = ref(1);
+
+const stateFirstList = ref(false);
+const stateSecondList = ref(false);
+
+const openSelectFirst = (value) => { stateFirstList.value = value; };
+const openSelectSecond = (value) => { stateSecondList.value = value; };
 
 // вычисление коэффициента
 const ratioFirstFromSecond = computed(
@@ -156,6 +172,10 @@ const selectFavorite = (favorite) => {
 </script>
 
 <style module lang="scss">
+$activeColor: #e7e7e7;
+$defaultColor: #fff;
+$accentColor: #333;
+
 *,
 *::after,
 *::before{
@@ -165,7 +185,7 @@ const selectFavorite = (favorite) => {
 }
 .converter{
   font-family: sans-serif;
-  margin: 180px auto;
+  margin: 130px auto;
   max-width: 1100px;
 }
 
@@ -178,6 +198,7 @@ const selectFavorite = (favorite) => {
 .main{
   display: flex;
   justify-content: space-between;
+  position: relative;
 }
 
 .title {
@@ -197,14 +218,13 @@ const selectFavorite = (favorite) => {
 }
 
 .button:hover {
-  fill: rgb(0, 0, 0);
+  fill: $accentColor;
 }
 
 .form {
   display: flex;
   flex-direction: row;
   align-items: center;
-  position: relative;
 }
 
 .ratio {
@@ -215,26 +235,40 @@ const selectFavorite = (favorite) => {
 
 .buttons{
   position: absolute;
-  right: 30px;
-  top: 10px
+  right: 0px;
+  top: -50px
 }
 
+.favoritesBtn{
+  background-color: transparent;
+  border-radius: 10px;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s linear;
+  font-weight: 600;
+  font-size: 14px;
+}
+.favoritesBtn:hover{
+  background-color: rgb(219, 219, 219);
+}
+
+.favoritesBtn + .favoritesBtn{
+  margin-left: 10px;
+}
 @media screen and (max-width: 1000px){
   .converter{
     padding: 30px;
     margin: 100px auto;
   }
-  .wrapper {
+  .main {
     flex-direction: column;
     justify-content: center;
   }
-
   .button {
     display: block;
     margin: 20px auto;
     transform: rotate(90deg);
   }
-
   .form {
     justify-content: center;
   }
@@ -247,9 +281,11 @@ const selectFavorite = (favorite) => {
   .title {
     font-size: 40px;
   }
-
   .wrapper {
-    padding: 20px;
+    padding: 60px 20px 20px;
+  }
+  .favoritesBtn + .favoritesBtn {
+    margin-left: 5px;
   }
 }
 </style>

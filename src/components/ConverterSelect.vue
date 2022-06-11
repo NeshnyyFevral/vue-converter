@@ -1,29 +1,51 @@
 <template>
   <div>
     <div
-      :class="$style.select"
-      @click.stop="selectOpen = !selectOpen"
+      :class="$style.selectContainer"
     >
-      <div :class="$style.selectedText">
-        {{ props.selectedAttr }}
-        <div :class="[$style.selectedIcon, selectOpen && $style.selectClosed ]">
-          <arrow-svg />
+      <div
+        :class="[$style.select, selectOpen && $style.selectActive]"
+        @click.stop="selectOpen = !selectOpen"
+      >
+        <div :class="$style.selectedText">
+          {{ props.selectedAttr }}
+          <div :class="[$style.selectedIcon, selectOpen && $style.selectClosed]">
+            <arrow-svg />
+          </div>
         </div>
       </div>
+      <ul
+        v-if="selectOpen"
+        :class="$style.selectList"
+      >
+        <li
+          v-for="currency in props.currencies"
+          :key="currency.ID"
+          :class="$style.option"
+          @click="changeValueSelect(currency)"
+        >
+          <div :class="$style.text">
+            <span :class="$style.textName">{{ currency.Name }}</span>
+            <span :class="$style.textCharCode">{{ currency.CharCode }}</span>
+          </div>
+        </li>
+      </ul>
     </div>
-    <ul
-      v-if="selectOpen"
-      :class="$style.selectList"
+    <select
+      :class="$style.selectMobile"
+      :value="props.selectedAttr"
+      @change="changeValueSelectMobile"
     >
-      <li
+      <option
         v-for="currency in props.currencies"
         :key="currency.ID"
-        :class="$style.option"
-        @click="changeValueSelect(currency)"
+        :class="$style.optionMobile"
       >
-        {{ currency.CharCode }}
-      </li>
-    </ul>
+        <div :class="$style.textMobile">
+          <span>{{ currency.CharCode }}</span>
+        </div>
+      </option>
+    </select>
   </div>
 </template>
 
@@ -33,6 +55,7 @@ import {
 	watch,
 	onMounted,
 	onUnmounted,
+	toRefs,
 } from 'vue';
 import arrowSvg from '../icons/arrow.svg';
 
@@ -40,7 +63,7 @@ const selectOpen = ref(false);
 const selectValue = ref('');
 const app = document.querySelector('html');
 
-const emits = defineEmits(['changeValueSelect']);
+const emits = defineEmits(['changeValueSelect', 'openSelect']);
 const props = defineProps({
 	currencies: {
 		type: Object,
@@ -50,7 +73,13 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
+	stateAnotherList: {
+		type: Boolean,
+		default: false,
+	},
 });
+
+const refOpen = toRefs(props).stateAnotherList;
 
 const listСlosure = () => { selectOpen.value = false; };
 
@@ -60,6 +89,13 @@ watch(selectOpen, () => {
 	} else {
 		app.removeEventListener('click', listСlosure);
 	}
+	emits('openSelect', selectOpen.value);
+});
+
+watch(refOpen, () => {
+	if (props.stateAnotherList) {
+		selectOpen.value = false;
+	}
 });
 
 onMounted(() => {
@@ -67,26 +103,45 @@ onMounted(() => {
 	emits('changeValueSelect', selectValue.value);
 });
 
-onUnmounted(() => {
-	app.removeEventListener('click', listСlosure);
-});
+onUnmounted(() => { app.removeEventListener('click', listСlosure); });
 
 const changeValueSelect = (currency) => {
 	selectValue.value = currency.CharCode;
 	selectOpen.value = false;
 	emits('changeValueSelect', selectValue.value);
 };
+
+const changeValueSelectMobile = (event) => {
+	selectValue.value = event.target.value;
+	emits('changeValueSelect', selectValue.value);
+};
 </script>
 
 <style module lang="scss">
+$activeColor: #e7e7e7;
+$defaultColor: #fff;
+$accentColor: #333;
+
 .select {
   padding: 34.327px 45px;
-  border: solid #333 2px;
-  border-left: solid #333 1px;
+  border: solid $accentColor 2px;
+  border-left: solid $accentColor 1px;
   cursor: pointer;
-  background-color: #fff;
+  background-color: $defaultColor;
   transition: background-color 0.2s linear;
   position: relative;
+}
+
+.select:hover {
+  background-color: $activeColor;
+}
+
+.selectActive{
+  background-color: $activeColor;
+}
+
+.selectActive:hover{
+  background-color: $defaultColor;
 }
 
 .selectedText {
@@ -112,16 +167,13 @@ const changeValueSelect = (currency) => {
   transition: transform 0.5s ease-in-out;
 }
 
-.select:hover {
-  background-color: rgb(231, 231, 231);
-}
-
 .selectList {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  background-color: #fff;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 20px;
+  background-color: $defaultColor;
   padding: 10px;
-  border: solid 2px #333;
+  border: solid 2px $accentColor;
   border-radius: 15px;
   position: absolute;
   z-index: 1000;
@@ -131,6 +183,7 @@ const changeValueSelect = (currency) => {
 }
 
 .option {
+  width: 300px;
   padding: 5px;
   border-radius: 10px;
   cursor: pointer;
@@ -138,12 +191,41 @@ const changeValueSelect = (currency) => {
 }
 
 .option:hover {
-  background-color: rgb(237, 237, 237);
+  background-color: $activeColor;
+}
+
+.text {
+  display: flex;
+  justify-content: space-between;
+}
+
+.textCharCode{
+  font-weight: 600;
+}
+
+.selectMobile{
+  padding: 22.5px 10px;
+  display: none;
+  width: 90px;
+  border: 2px $accentColor solid;
+  border-radius: none;
+  font-size: 20px;
+}
+
+.optionMobile{
+  display: flex;
+  justify-content: center;
 }
 
 @media screen and (max-width: 1000px) {
   .select {
     padding: 34.45px 45px;
+  }
+  .selectContainer{
+    display: none;
+  }
+  .selectMobile{
+    display: block;
   }
 }
 </style>

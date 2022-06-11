@@ -47,6 +47,12 @@ const inputText = (event) => {
   -moz-appearance: textfield;
 }
 
+@media screen and (max-width: 1000px){
+  .input{
+    border-right: none;
+  }
+}
+
 @media screen and (max-width: 500px) {
   .input {
     max-width: 200px;

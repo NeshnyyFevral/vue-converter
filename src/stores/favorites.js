@@ -21,6 +21,10 @@ export const useFavoritesStore = defineStore({
 			this.favorites.splice(index, 1);
 			this.watchFavorites();
 		},
+		clearFavorites() {
+			this.favorites = [];
+			this.watchFavorites();
+		},
 		watchFavorites() {
 			localStorage.setItem('localeFavorites', JSON.stringify(this.favorites));
 		},
