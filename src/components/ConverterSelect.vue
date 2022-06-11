@@ -123,7 +123,7 @@ $defaultColor: #fff;
 $accentColor: #333;
 
 .select {
-  padding: 34.327px 45px;
+  padding: 34.5px 45px;
   border: solid $accentColor 2px;
   border-left: solid $accentColor 1px;
   cursor: pointer;
@@ -210,6 +210,7 @@ $accentColor: #333;
   border: 2px $accentColor solid;
   border-radius: none;
   font-size: 20px;
+  background-color: $defaultColor;
 }
 
 .optionMobile{
