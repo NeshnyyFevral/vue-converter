@@ -22,7 +22,7 @@
           </div>
         </div>
         <button
-          :class="$style.button"
+          :class="$style.buttonSwap"
           @click="swap"
         >
           <arrows-swap-svg />
@@ -218,7 +218,7 @@ $accentColorDark: #5a5a5a;
   margin-bottom: 20px;
 }
 
-.button {
+.buttonSwap {
   border: none;
   width: 60px;
   height: 60px;
@@ -228,7 +228,7 @@ $accentColorDark: #5a5a5a;
   transition: fill 0.2s linear;
 }
 
-.button:hover {
+.buttonSwap:hover {
   fill: $accentColor;
 }
 
@@ -275,7 +275,7 @@ $accentColorDark: #5a5a5a;
     flex-direction: column;
     justify-content: center;
   }
-  .button {
+  .buttonSwap {
     display: block;
     margin: 20px auto;
     transform: rotate(90deg);
@@ -317,6 +317,9 @@ $accentColorDark: #5a5a5a;
   }
   .favoritesBtn:hover{
     background-color: $accentColorDark;
+  }
+  .buttonSwap:hover{
+    fill: $defaultColor;
   }
 }
 
