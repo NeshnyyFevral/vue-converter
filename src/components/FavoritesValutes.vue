@@ -53,6 +53,8 @@ const selectFavorite = (favorite) => {
 </script>
 
 <style module lang="scss">
+$defaultColor: #fff;
+$accentColorDark: #5a5a5a;
 .container{
   margin-top: 10px;
   padding: 10px;
@@ -146,6 +148,21 @@ const selectFavorite = (favorite) => {
 @media screen and (max-width: 1000px){
   .button{
     opacity: 1;
+  }
+}
+
+@media screen and (prefers-color-scheme: dark){
+  .listItem{
+    border: 1px solid $defaultColor;
+  }
+  .listItem:hover{
+    background-color: $accentColorDark;
+  }
+  .arrowDown{
+    fill: $defaultColor;
+  }
+  .buttonSvg{
+    fill: $defaultColor;
   }
 }
 </style>

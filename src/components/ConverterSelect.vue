@@ -121,6 +121,7 @@ const changeValueSelectMobile = (event) => {
 $activeColor: #e7e7e7;
 $defaultColor: #fff;
 $accentColor: #333;
+$accentColorDark: #5a5a5a;
 
 .select {
   padding: 34.5px 45px;
@@ -227,6 +228,18 @@ $accentColor: #333;
   }
   .selectMobile{
     display: block;
+  }
+}
+@media screen and (prefers-color-scheme: dark){
+  .select{
+    background-color: $defaultColor;
+    color: $accentColor
+  }
+  .selectList{
+    background-color: $accentColor;
+  }
+  .option:hover:hover{
+    background-color: $accentColorDark;
   }
 }
 </style>

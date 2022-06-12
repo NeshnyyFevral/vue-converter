@@ -9,6 +9,8 @@ import { useCurrenciesStore } from './stores/currencies';
 
 const currenciesStore = useCurrenciesStore();
 onMounted(() => {
-	currenciesStore.fetchCurrencies();
+	setTimeout(async () => {
+		currenciesStore.fetchCurrencies();
+	}, 2000);
 });
 </script>

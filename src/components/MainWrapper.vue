@@ -175,6 +175,17 @@ const selectFavorite = (favorite) => {
 $activeColor: #e7e7e7;
 $defaultColor: #fff;
 $accentColor: #333;
+$accentColorDark: #5a5a5a;
+
+@mixin darkTheme{
+  color: $defaultColor;
+  background-color: $accentColor;
+}
+
+@mixin lightTheme{
+  color: $accentColor;
+  background-color: $defaultColor;
+}
 
 *,
 *::after,
@@ -213,7 +224,7 @@ $accentColor: #333;
   height: 60px;
   cursor: pointer;
   background-color: transparent;
-  fill: rgb(109, 109, 109);
+  fill: $accentColorDark;
   transition: fill 0.2s linear;
 }
 
@@ -286,6 +297,32 @@ $accentColor: #333;
   }
   .favoritesBtn + .favoritesBtn {
     margin-left: 5px;
+  }
+}
+
+@media screen and (prefers-color-scheme: dark){
+  body{
+    background-color: rgb(24, 24, 24);
+  }
+  .converter{
+    color: $defaultColor;
+    background-color: rgb(24, 24, 24);
+  }
+  .wrapper{
+    @include darkTheme;
+  }
+  .favoritesBtn{
+    color: $defaultColor;
+    border: 2px solid $defaultColor;
+  }
+  .favoritesBtn:hover{
+    background-color: $accentColorDark;
+  }
+}
+
+@media screen and (prefers-color-scheme: light){
+  .converter{
+    @include lightTheme;
   }
 }
 </style>
