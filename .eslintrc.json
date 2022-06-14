@@ -21,6 +21,7 @@
         "vue/no-duplicate-attributes": "off",
         "import/prefer-default-export": "off",
         "no-restricted-syntax": "off",
+        "class-methods-use-this": ["error", { "enforceForClassFields": false }],
         "indent": [
             2,
             "tab"

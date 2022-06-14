@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import appStotage from '../appStorage/index';
 
 export const useFavoritesStore = defineStore({
 	id: 'favorites',
@@ -14,19 +15,16 @@ export const useFavoritesStore = defineStore({
 			};
 			favorite.id = Date.now();
 			this.favorites.push(favorite);
-			this.watchFavorites();
+			appStotage.set('localeFavorites', this.favorites);
 		},
 		deleteFavorite(value) {
 			const index = this.favorites.findIndex((favorite) => favorite.id === value.id);
 			this.favorites.splice(index, 1);
-			this.watchFavorites();
+			appStotage.set('localeFavorites', this.favorites);
 		},
 		clearFavorites() {
 			this.favorites = [];
-			this.watchFavorites();
-		},
-		watchFavorites() {
-			localStorage.setItem('localeFavorites', JSON.stringify(this.favorites));
+			appStotage.set('localeFavorites', this.favorites);
 		},
 	},
 });

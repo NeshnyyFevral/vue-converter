@@ -74,6 +74,7 @@ import FavoritesValutes from './FavoritesValutes.vue';
 import { useCurrenciesStore } from '../stores/currencies';
 import { useFavoritesStore } from '../stores/favorites';
 import arrowsSwapSvg from '../icons/arrows-swap.svg';
+import appStorage from '../appStorage/index';
 
 const currenciesStore = useCurrenciesStore();
 const favoritesStore = useFavoritesStore();
@@ -104,21 +105,21 @@ const computeInputValueSecond = () => {
 };
 
 onMounted(() => {
-	selectedFirst.value = JSON.parse(localStorage.getItem('localeSelectFirst')) || 'AUD';
-	selectedSecond.value = JSON.parse(localStorage.getItem('localeSelectSecond')) || 'AUD';
-	valueFirst.value = JSON.parse(localStorage.getItem('localeSelectFirstValue')) || 1;
-	valueSecond.value = JSON.parse(localStorage.getItem('localeSelectSecondValue')) || 1;
+	selectedFirst.value = appStorage.get('localeSelectFirst') || 'AUD';
+	selectedSecond.value = appStorage.get('localeSelectSecond') || 'AUD';
+	valueFirst.value = appStorage.get('localeSelectFirstValue') || 1;
+	valueSecond.value = appStorage.get('localeSelectSecondValue') || 1;
 	computeInputValueSecond();
 });
 
 const watchSelectFirst = () => {
-	localStorage.setItem('localeSelectFirst', JSON.stringify(selectedFirst.value));
-	localStorage.setItem('localeSelectFirstValue', JSON.stringify(valueFirst.value));
+	appStorage.set('localeSelectFirst', selectedFirst.value);
+	appStorage.set('localeSelectFirstValue', valueFirst.value);
 };
 
 const watchSelectSecond = () => {
-	localStorage.setItem('localeSelectSecond', JSON.stringify(selectedSecond.value));
-	localStorage.setItem('localeSelectSecondValue', JSON.stringify(valueSecond.value));
+	appStorage.set('localeSelectSecond', selectedSecond.value);
+	appStorage.set('localeSelectSecondValue', valueSecond.value);
 };
 
 // получение данных из input
