@@ -173,20 +173,6 @@ const selectFavorite = (favorite) => {
 </script>
 
 <style module lang="scss">
-$activeColor: #e7e7e7;
-$defaultColor: #fff;
-$accentColor: #333;
-$accentColorDark: #5a5a5a;
-
-@mixin darkTheme{
-  color: $defaultColor;
-  background-color: $accentColor;
-}
-
-@mixin lightTheme{
-  color: $accentColor;
-  background-color: $defaultColor;
-}
 
 *,
 *::after,
@@ -195,6 +181,32 @@ $accentColorDark: #5a5a5a;
   padding: 0;
   margin: 0;
 }
+
+:root{
+  --color-accent: #333;
+  --color-text: #333;
+  --color-default-swap: #666666;
+  --color-active-fav: #cecece;
+  --color-active: #d6d6d6;
+  --color-select: #fff;
+  --color-default: #fff;
+  @media screen and (prefers-color-scheme: dark){
+    --color-active: #171717;
+    --color-default-wrap: #333;
+    --color-default: #494949;
+    --color-accent: #5a5a5a;
+    --color-select: #5b5b5b;
+    --color-default-swap: #747474;
+    --color-active-fav: #959595;
+    --color-text: #fff;
+  }
+}
+
+body{
+  background-color: var(--color-default);
+  color: var(--color-text);
+}
+
 .converter{
   font-family: sans-serif;
   margin: 130px auto;
@@ -203,7 +215,7 @@ $accentColorDark: #5a5a5a;
 
 .wrapper {
   padding: 60px;
-  background-color: rgb(244, 244, 244);
+  background-color: var(--color-default-wrap);
   position: relative;
 }
 
@@ -225,12 +237,12 @@ $accentColorDark: #5a5a5a;
   height: 60px;
   cursor: pointer;
   background-color: transparent;
-  fill: $accentColorDark;
+  fill: var(--color-default-swap);
   transition: fill 0.2s linear;
 }
 
 .buttonSwap:hover {
-  fill: $accentColor;
+  fill: var(--color-text);
 }
 
 .form {
@@ -252,21 +264,24 @@ $accentColorDark: #5a5a5a;
 }
 
 .favoritesBtn{
+  color: var(--color-text);
+  border: 2px solid currentColor;
   background-color: transparent;
   border-radius: 10px;
-  padding: 5px;
+  padding: 7px;
   cursor: pointer;
   transition: background-color 0.2s linear;
   font-weight: 600;
   font-size: 14px;
 }
 .favoritesBtn:hover{
-  background-color: rgb(219, 219, 219);
+  background-color: var(--color-active);
 }
 
 .favoritesBtn + .favoritesBtn{
   margin-left: 10px;
 }
+
 @media screen and (max-width: 1000px){
   .converter{
     padding: 30px;
@@ -298,35 +313,6 @@ $accentColorDark: #5a5a5a;
   }
   .favoritesBtn + .favoritesBtn {
     margin-left: 5px;
-  }
-}
-
-@media screen and (prefers-color-scheme: dark){
-  body{
-    background-color: rgb(24, 24, 24);
-  }
-  .converter{
-    color: $defaultColor;
-    background-color: rgb(24, 24, 24);
-  }
-  .wrapper{
-    @include darkTheme;
-  }
-  .favoritesBtn{
-    color: $defaultColor;
-    border: 2px solid $defaultColor;
-  }
-  .favoritesBtn:hover{
-    background-color: $accentColorDark;
-  }
-  .buttonSwap:hover{
-    fill: $defaultColor;
-  }
-}
-
-@media screen and (prefers-color-scheme: light){
-  .converter{
-    @include lightTheme;
   }
 }
 </style>

@@ -13,6 +13,11 @@
       tag="ul"
       :class="$style.list"
       :name="$style.list"
+      :enter-active-class="$style.listEnterActive"
+      :leave-active-class="$style.listLeaveActive"
+      :move-class="$style.listMove"
+      :enter-from-class="$style.listEnterFrom"
+      :leave-to-class="$style.listLeaveTo"
     >
       <li
         v-for="favorite in favoritesStore.favorites"
@@ -53,8 +58,6 @@ const selectFavorite = (favorite) => {
 </script>
 
 <style module lang="scss">
-$defaultColor: #fff;
-$accentColorDark: #5a5a5a;
 .container{
   margin-top: 10px;
   padding: 10px;
@@ -70,35 +73,35 @@ $accentColorDark: #5a5a5a;
 }
 .container .list{
   list-style: none;
-  &:global(-enter-active),
-  &:global(-leave-active){
+  &EnterActive,
+  &LeaveActive,
+  &Move{
     transition: all 0.8s ease;
   }
-  &:global(-move){
-    transition: all 0.8s ease;
-  }
-  &:global(-enter-from),
-  &:global(-leave-to){
+
+  &EnterFrom,
+  &LeaveTo{
     opacity: 0;
     transform: translateY(30px);
   }
-  &:global(-leave-active){
+  &LeaveActive{
     position: absolute;
   }
 }
 .listItem{
   padding: 10px;
-  border: 1px solid #333;
+  border: 2px solid rgb(14, 14, 14);
   border-radius: 15px;
   cursor: pointer;
   transition: background-color 0.2s linear;
   display: flex;
   justify-content: space-between;
-  align-items: center
+  align-items: center;
+  background-color: var(--color-default);
 }
 
 .listItem:hover{
-  background-color: rgb(216, 216, 216);
+  background-color: var(--color-active-fav);
 }
 
 .listItem + .listItem{
@@ -143,26 +146,16 @@ $accentColorDark: #5a5a5a;
   width: 20px;
   height: 20px;
   transform: rotate(-90deg) translateX(-1px);
+  fill: var(--color-text);
+}
+
+.buttonSvg{
+  fill: var(--color-text);
 }
 
 @media screen and (max-width: 1000px){
   .button{
     opacity: 1;
-  }
-}
-
-@media screen and (prefers-color-scheme: dark){
-  .listItem{
-    border: 1px solid $defaultColor;
-  }
-  .listItem:hover{
-    background-color: $accentColorDark;
-  }
-  .arrowDown{
-    fill: $defaultColor;
-  }
-  .buttonSvg{
-    fill: $defaultColor;
   }
 }
 </style>

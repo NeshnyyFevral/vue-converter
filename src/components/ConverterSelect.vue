@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div ref="root">
     <div
       :class="$style.selectContainer"
     >
       <div
         :class="[$style.select, selectOpen && $style.selectActive]"
-        @click.stop="selectOpen = !selectOpen"
+        @click="selectOpen = !selectOpen"
       >
         <div :class="$style.selectedText">
           {{ props.selectedAttr }}
@@ -55,13 +55,11 @@ import {
 	watch,
 	onMounted,
 	onUnmounted,
-	toRefs,
 } from 'vue';
 import arrowSvg from '../icons/arrow.svg';
 
 const selectOpen = ref(false);
 const selectValue = ref('');
-const app = document.querySelector('html');
 
 const emits = defineEmits(['changeValueSelect', 'openSelect']);
 const props = defineProps({
@@ -79,23 +77,21 @@ const props = defineProps({
 	},
 });
 
-const refOpen = toRefs(props).stateAnotherList;
+const root = ref(null);
 
-const listСlosure = () => { selectOpen.value = false; };
+const listСlosure = (e) => {
+	if (!root.value?.contains(e.target)) {
+		selectOpen.value = false;
+	}
+};
 
 watch(selectOpen, () => {
 	if (selectOpen.value) {
-		app.addEventListener('click', listСlosure);
+		document.addEventListener('click', listСlosure);
 	} else {
-		app.removeEventListener('click', listСlosure);
+		document.removeEventListener('click', listСlosure);
 	}
 	emits('openSelect', selectOpen.value);
-});
-
-watch(refOpen, () => {
-	if (props.stateAnotherList) {
-		selectOpen.value = false;
-	}
 });
 
 onMounted(() => {
@@ -103,7 +99,7 @@ onMounted(() => {
 	emits('changeValueSelect', selectValue.value);
 });
 
-onUnmounted(() => { app.removeEventListener('click', listСlosure); });
+onUnmounted(() => { document.removeEventListener('click', listСlosure); });
 
 const changeValueSelect = (currency) => {
 	selectValue.value = currency.CharCode;
@@ -118,31 +114,23 @@ const changeValueSelectMobile = (event) => {
 </script>
 
 <style module lang="scss">
-$activeColor: #e7e7e7;
-$defaultColor: #fff;
-$accentColor: #333;
-$accentColorDark: #5a5a5a;
-
 .select {
   padding: 34.5px 45px;
-  border: solid $accentColor 2px;
-  border-left: solid $accentColor 1px;
+  border: solid var(--color-accent) 2px;
+  border-left: solid var(--color-accent) 1px;
   cursor: pointer;
-  background-color: $defaultColor;
+  background-color: #fff;
   transition: background-color 0.2s linear;
   position: relative;
+  color: var(--color-default-wrap);
 }
 
 .select:hover {
-  background-color: $activeColor;
+  background-color: var(--color-active-fav);
 }
 
 .selectActive{
-  background-color: $activeColor;
-}
-
-.selectActive:hover{
-  background-color: $defaultColor;
+  background-color: var(--color-active-fav);
 }
 
 .selectedText {
@@ -172,9 +160,9 @@ $accentColorDark: #5a5a5a;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   column-gap: 20px;
-  background-color: $defaultColor;
+  background-color: var(--color-select);
   padding: 10px;
-  border: solid 2px $accentColor;
+  border: solid 2px var(--color-text);
   border-radius: 15px;
   position: absolute;
   z-index: 1000;
@@ -192,7 +180,7 @@ $accentColorDark: #5a5a5a;
 }
 
 .option:hover {
-  background-color: $activeColor;
+  background-color: var(--color-active-fav);
 }
 
 .text {
@@ -208,10 +196,10 @@ $accentColorDark: #5a5a5a;
   padding: 22.5px 10px;
   display: none;
   width: 90px;
-  border: 2px $accentColor solid;
+  border: 2px #333 solid;
   border-radius: none;
   font-size: 20px;
-  background-color: $defaultColor;
+  background-color: #fff;
 }
 
 .optionMobile{
@@ -228,18 +216,6 @@ $accentColorDark: #5a5a5a;
   }
   .selectMobile{
     display: block;
-  }
-}
-@media screen and (prefers-color-scheme: dark){
-  .select{
-    background-color: $defaultColor;
-    color: $accentColor
-  }
-  .selectList{
-    background-color: $accentColor;
-  }
-  .option:hover:hover{
-    background-color: $accentColorDark;
   }
 }
 </style>
