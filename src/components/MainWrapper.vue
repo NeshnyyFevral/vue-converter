@@ -1,64 +1,78 @@
 <template>
   <div :class="$style.converter">
-    <h1 :class="$style.title">
-      Vue Converter
-    </h1>
-    <div :class="$style.wrapper">
-      <div :class="$style.main">
-        <div :class="$style.item">
-          <converter-item
-            :class="$style.form"
-            :computed-value="inputValueFirst"
-            :selected-attr="selectedFirst"
-            :state-another-list="stateSecondList"
-            @input-text="inputFirst"
-            @change-value-select="changeFirst"
-            @open-select="openSelectFirst"
-          />
-          <div :class="$style.ratio">
-            1 {{ selectedFirst }} =
-            {{ ratioFirstFromSecond }}
-            {{ selectedSecond }}
-          </div>
-        </div>
-        <button
-          :class="$style.buttonSwap"
-          @click="swap"
-        >
-          <arrows-swap-svg />
-        </button>
-        <div :class="$style.item">
-          <converter-item
-            :class="$style.form"
-            :computed-value="inputValueSecond"
-            :selected-attr="selectedSecond"
-            :state-another-list="stateFirstList"
-            @input-text="inputSecond"
-            @change-value-select="changeSecond"
-            @open-select="openSelectSecond"
-          />
-          <div :class="$style.ratio">
-            1 {{ selectedSecond }} =
-            {{ ratioSecondFromFirst }}
-            {{ selectedFirst }}
-          </div>
-        </div>
-        <div :class="$style.buttons">
-          <button
-            :class="$style.favoritesBtn"
-            @click="createFavorite"
-          >
-            Add to favorites
-          </button>
-          <button
-            :class="$style.favoritesBtn"
-            @click="favoritesStore.clearFavorites"
-          >
-            Clear all favorites
-          </button>
-        </div>
+    <div
+      v-if="Object.keys(currenciesStore.currencies).length == 0"
+      :class="$style.preloader"
+    >
+      <div :class="$style.row">
+        <div :class="$style.rowItem" />
+        <div :class="$style.rowItem" />
       </div>
-      <favorites-valutes @select-favorite="selectFavorite" />
+    </div>
+    <div
+      v-else
+      :class="$style.content"
+    >
+      <h1 :class="$style.title">
+        Vue Converter
+      </h1>
+      <div :class="$style.wrapper">
+        <div :class="$style.main">
+          <div :class="$style.item">
+            <converter-item
+              :class="$style.form"
+              :computed-value="inputValueFirst"
+              :selected-attr="selectedFirst"
+              :state-another-list="stateSecondList"
+              @input-text="inputFirst"
+              @change-value-select="changeFirst"
+              @open-select="openSelectFirst"
+            />
+            <div :class="$style.ratio">
+              1 {{ selectedFirst }} =
+              {{ ratioFirstFromSecond }}
+              {{ selectedSecond }}
+            </div>
+          </div>
+          <button
+            :class="$style.buttonSwap"
+            @click="swap"
+          >
+            <arrows-swap-svg />
+          </button>
+          <div :class="$style.item">
+            <converter-item
+              :class="$style.form"
+              :computed-value="inputValueSecond"
+              :selected-attr="selectedSecond"
+              :state-another-list="stateFirstList"
+              @input-text="inputSecond"
+              @change-value-select="changeSecond"
+              @open-select="openSelectSecond"
+            />
+            <div :class="$style.ratio">
+              1 {{ selectedSecond }} =
+              {{ ratioSecondFromFirst }}
+              {{ selectedFirst }}
+            </div>
+          </div>
+          <div :class="$style.buttons">
+            <button
+              :class="$style.favoritesBtn"
+              @click="createFavorite"
+            >
+              Add to favorites
+            </button>
+            <button
+              :class="$style.favoritesBtn"
+              @click="favoritesStore.clearFavorites"
+            >
+              Clear all favorites
+            </button>
+          </div>
+        </div>
+        <favorites-valutes @select-favorite="selectFavorite" />
+      </div>
     </div>
   </div>
 </template>
@@ -280,6 +294,61 @@ body{
 
 .favoritesBtn + .favoritesBtn{
   margin-left: 10px;
+}
+
+.preloader {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-default);
+  z-index: 1001;
+}
+
+.row {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  width: 70px;
+  height: 70px;
+  margin-top: -50px;
+  margin-left: -35px;
+  animation: preloader-rotate 2s infinite linear;
+}
+
+.rowItem {
+  position: absolute;
+  display: inline-block;
+  top: 0;
+  background-color: #3c8fd8;
+  border-radius: 100%;
+  width: 35px;
+  height: 35px;
+  animation: preloader-bounce 2s infinite ease-in-out;
+}
+
+.rowItem:last-child {
+  top: auto;
+  bottom: 0;
+  animation-delay: -1s;
+}
+
+@keyframes preloader-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes preloader-bounce {
+  0%,
+  100% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1);
+  }
 }
 
 @media screen and (max-width: 1000px){

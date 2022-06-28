@@ -9,7 +9,7 @@ import { useCurrenciesStore } from './stores/currencies';
 
 const currenciesStore = useCurrenciesStore();
 onMounted(() => {
-	setTimeout(async () => {
+	setTimeout(async () => { // для имитации загрузки
 		currenciesStore.fetchCurrencies();
 	}, 2000);
 });
